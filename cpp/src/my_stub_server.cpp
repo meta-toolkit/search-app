@@ -4,8 +4,8 @@
 #include "logging/logger.h"
 
 MyStubServer::MyStubServer(AbstractServerConnector& connector,
-                           const cpptoml::table& config)
-    : AbstractStubServer{connector}
+                           std::shared_ptr<meta::index::inverted_index> idx)
+    : AbstractStubServer{connector}, idx_(std::move(idx))
 {
 }
 

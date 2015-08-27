@@ -1,19 +1,20 @@
-stop-words = "../data/lemur-stopwords.txt"
-libsvm-modules = "../deps/libsvm-modules/"
-prefix = "../data/"
-function-words = "../data/function-words.txt"
-punctuation = "../data/sentence-boundaries/sentence-punctuation.txt"
-start-exceptions = "../data/sentence-boundaries/sentence-start-exceptions.txt"
-end-exceptions = "../data/sentence-boundaries/sentence-end-exceptions.txt"
-query-judgements = "../data/ceeaus-qrels.txt"
+stop-words = "../meta/data/lemur-stopwords.txt"
+prefix = "../meta/data/"
+function-words = "../meta/data/function-words.txt"
+punctuation = "../meta/data/sentence-boundaries/sentence-punctuation.txt"
+start-exceptions = "../meta/data/sentence-boundaries/sentence-start-exceptions.txt"
+end-exceptions = "../meta/data/sentence-boundaries/sentence-end-exceptions.txt"
+query-judgements = "../meta/data/ceeaus-qrels.txt"
 query-path = "../queries.txt" # create this file
 
-dataset = "20newsgroups"
-corpus = "line.toml" # located inside dataset folder
-forward-index = "20news-fwd"
-inverted-index = "20news-inv"
+dataset = "ceeaus"
+corpus-type = "line-corpus" # for MeTA < v2.0
+corpus = "line.toml" # located inside dataset folder, for MeTA >= v2.0
+forward-index = "ceeaus-fwd"
+inverted-index = "ceeaus-inv"
 indexer-ram-budget = 1024 # **estimated** RAM budget for indexing in MB
                           # always set this lower than your physical RAM!
+                          # for MeTA >= v2.0
 
 [[analyzers]]
 method = "ngram-word"
