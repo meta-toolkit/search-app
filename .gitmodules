@@ -1,0 +1,3 @@
+[submodule "cpp/meta"]
+	path = cpp/meta
+	url = git@github.com:meta-toolkit/meta.git

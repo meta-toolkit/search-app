@@ -1,0 +1,9 @@
+[
+    {
+        "method": "search",
+        "params": {
+            "query": "user-provided search engine query"
+        },
+        "returns" : [{}, {}, {}]
+    }
+]
