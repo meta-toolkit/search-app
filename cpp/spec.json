@@ -2,7 +2,7 @@
     {
         "method": "search",
         "params": {
-            "query": "user-provided search engine query"
+            "query_text": "user-provided search engine query"
         },
         "returns" : [{}, {}, {}]
     }

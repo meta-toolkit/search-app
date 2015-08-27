@@ -94,5 +94,5 @@ endif()
 add_subdirectory(meta meta-libs EXCLUDE_FROM_ALL)
 
 add_executable(api-server src/api-server.cpp src/my_stub_server.cpp)
-target_link_libraries(api-server cpptoml meta-index jsoncpp microhttpd
-    jsonrpccpp-common jsonrpccpp-server)
+target_link_libraries(api-server cpptoml meta-index meta-ranker jsoncpp
+    microhttpd jsonrpccpp-common jsonrpccpp-server)

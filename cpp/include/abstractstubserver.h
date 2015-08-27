@@ -15,19 +15,19 @@ class AbstractStubServer : public jsonrpc::AbstractServer<AbstractStubServer>
                        = jsonrpc::JSONRPC_SERVER_V2)
         : jsonrpc::AbstractServer<AbstractStubServer>(conn, type)
     {
-        this->bindAndAddMethod(jsonrpc::Procedure("search",
-                                                  jsonrpc::PARAMS_BY_NAME,
-                                                  jsonrpc::JSON_OBJECT, "query",
-                                                  jsonrpc::JSON_STRING, NULL),
-                               &AbstractStubServer::searchI);
+        this->bindAndAddMethod(
+            jsonrpc::Procedure("search", jsonrpc::PARAMS_BY_NAME,
+                               jsonrpc::JSON_OBJECT, "query_text",
+                               jsonrpc::JSON_STRING, NULL),
+            &AbstractStubServer::searchI);
     }
 
     inline virtual void searchI(const Json::Value& request,
-                                 Json::Value& response)
+                                Json::Value& response)
     {
-        response = this->search(request["query"].asString());
+        response = this->search(request["query_text"].asString());
     }
-    virtual Json::Value search(const std::string& query) = 0;
+    virtual Json::Value search(const std::string& query_text) = 0;
 };
 
 #endif // JSONRPC_CPP_STUB_ABSTRACTSTUBSERVER_H_
