@@ -8,13 +8,11 @@ query-judgements = "../meta/data/ceeaus-qrels.txt"
 query-path = "../queries.txt" # create this file
 
 dataset = "ceeaus"
-corpus-type = "line-corpus" # for MeTA < v2.0
-corpus = "line.toml" # located inside dataset folder, for MeTA >= v2.0
+corpus = "line.toml" # located inside dataset folder
 forward-index = "ceeaus-fwd"
 inverted-index = "ceeaus-inv"
 indexer-ram-budget = 1024 # **estimated** RAM budget for indexing in MB
                           # always set this lower than your physical RAM!
-                          # for MeTA >= v2.0
 
 [[analyzers]]
 method = "ngram-word"
