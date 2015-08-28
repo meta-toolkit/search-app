@@ -25,4 +25,6 @@ $ ->
 
 print_results = (result) ->
   for doc in result.results
-    $("#search_results_list").append("<li>#{doc.path}, #{doc.score}</li>")
+    html = "<li><h4><a href='#'>#{doc.path}</a>"
+    html += "<small class='pull-right'>#{doc.score.toFixed(4)}</small></h4></li>"
+    $("#search_results_list").append(html)

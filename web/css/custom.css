@@ -1,6 +1,10 @@
 /* Sticky footer styles
 @see http://getbootstrap.com/examples/sticky-footer-navbar/
 -------------------------------------------------- */
+ul {
+  list-style: none
+}
+
 .navbar-form {
   width: 100%;
   padding-top: 0;

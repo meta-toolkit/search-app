@@ -3,6 +3,7 @@
 #include "my_stub_server.h"
 #include "corpus/document.h"
 #include "index/ranker/ranker_factory.h"
+#include "index/ranker/okapi_bm25.h"
 #include "logging/logger.h"
 #include "util/time.h"
 
@@ -29,7 +30,7 @@ Json::Value MyStubServer::search(const std::string& query_text,
     auto elapsed = meta::common::time(
         [&]()
         {
-            if(last_ranker_method_ != ranker_method)
+            if (last_ranker_method_ != ranker_method)
             {
                 std::ofstream rconfig{"ranker.toml"};
                 rconfig << "method = \"" << ranker_method << "\"\n";
@@ -40,9 +41,12 @@ Json::Value MyStubServer::search(const std::string& query_text,
                     ranker_ = meta::index::make_ranker(
                         cpptoml::parse_file("ranker.toml"));
                 }
-                catch(meta::index::ranker_factory::exception& ex)
+                catch (meta::index::ranker_factory::exception& ex)
                 {
-                    LOG(error) << " -> couldn't create ranker!" << ENDLG;
+                    LOG(error)
+                        << " -> couldn't create ranker, defaulting to bm25"
+                        << ENDLG;
+                    ranker_ = make_unique<meta::index::okapi_bm25>();
                 }
             }
             for (auto& result : ranker_->score(*idx_, query, 20))
