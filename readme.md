@@ -7,8 +7,12 @@ the backend of a web-based search application.
 
 ### Dependencies
 
-[libjson-cpp-rpc](https://github.com/cinemast/libjson-rpc-cpp) needs to be
-installed. Any other dependencies that MeTA requires are also required.
+- [libjson-cpp-rpc](https://github.com/cinemast/libjson-rpc-cpp) needs to be
+  installed. Any other dependencies that MeTA requires are also required.
+- [Coffeescript](http://coffeescript.org/) is nice to use, and the project uses
+  this to generate the Javascript files. If you don't like Coffeescript, you can
+  slightly tweak the project to not use it.
+- [NodeJS](https://nodejs.org/) is used for the proxy server.
 
 ### MeTA API Server
 
