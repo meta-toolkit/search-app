@@ -19,23 +19,7 @@ the backend of a web-based search application.
 ```bash
 cd cpp/
 git submodule update --init --recursive
-cd meta/
-mkdir build/
-cd build/
 ```
-
-Then, compile MeTA by using `cmake` and `make`. Detailed instructions are on the
-MeTA site. We need to compile MeTA in order to use the static libraries that are
-generated.
-
-```bash
-cd cpp/
-mkdir meta-libs/
-cp meta/build/src/*/*.a meta-libs/
-cp meta/build/src/*/*/*.a meta-libs/
-```
-
-Now we can use the static libraries in the search application.
 
 Next, we can compile the API server.
 
