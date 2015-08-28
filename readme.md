@@ -35,8 +35,12 @@ The API server should now be built. You can run it from inside the `build/`
 directory with the command
 
 ```bash
-./api-server config.toml
+./api-server ../config.toml
 ```
+
+This assumes you have `config.toml` set up to point to a dataset. For more
+information, see the [Analyzers, Tokenizers, and Filters
+tutorial](https://meta-toolkit.org/analyzers-filters-tutorial.html).
 
 After you make modifications to the source files, you should only have to run
 `make` and restart the server.
