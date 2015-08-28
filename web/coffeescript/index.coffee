@@ -1,4 +1,5 @@
 $ ->
+  window.location.hash = "#bm25"
   $(".input-group").keypress (k) ->
     if k.which == 13 # enter key pressed
       $("#search_button").click()
@@ -15,6 +16,7 @@ $ ->
           method: "search"
           params:
             query_text: query
+            ranker_method: window.location.hash.slice(1)
           id: 1
         success: (data, stat, xhr) ->
           print_results(data.result)
