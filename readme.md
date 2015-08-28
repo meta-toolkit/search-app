@@ -5,6 +5,11 @@ the backend of a web-based search application.
 
 ## Initial setup
 
+### Dependencies
+
+[libjson-cpp-rpc](https://github.com/cinemast/libjson-rpc-cpp) needs to be
+installed. Any other dependencies that MeTA requires are also required.
+
 ### MeTA API Server
 
 ```bash
