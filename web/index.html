@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>MeTA Search</title>
+  <link href="css/sticky-footer.css" rel="stylesheet"/>
+  <link href="css/bootstrap.min.css" rel="stylesheet"/>
+</head>
+<body>
+  <div class="container-fluid">
+    <div class="page-header text-center">
+      <h1><a href="#">Search</a>
+      </h1>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-8 col-xs-offset-2">
+      <div class="input-group">
+        <div class="input-group-btn search-panel">
+          <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+            <span id="search_concept">Ranker</span>
+            <span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu" role="menu">
+            <li><a href="#okapi-bm25">Okapi BM25</a></li>
+            <li><a href="#pivoted-length">Pivoted Length Normalization</a></li>
+            <li><a href="#dirichlet-prior">Dirichlet Prior Smoothing</a></li>
+            <li><a href="#jelinek-mercer">Jelinek-Mercer Smoothing</a></li>
+          </ul>
+        </div>
+        <input type="hidden" name="search_param" value="all" id="search_param">
+        <input type="text" class="form-control" name="x" placeholder="Enter a query...">
+        <span class="input-group-btn">
+          <button class="btn btn-default" type="button">
+            <span class="glyphicon glyphicon-search"></span>
+          </button>
+        </span>
+      </div>
+    </div>
+  </div>
+  <div class="container">
+    <div class="row">
+      <div class="container" id="search_results">
+        <ol id="search_results_list">
+        </ol>
+      </div>
+    </div>
+  </div>
+  <footer class="footer">
+    <div class="container">
+      <p class="text-muted">
+        Powered by <a href="https://meta-toolkit.org/">MeTA</a>
+      </p>
+    </div>
+  </footer>
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="javascript/bootstrap.min.js"></script>
+<script src="javascript/index.js"></script>
+</html>
