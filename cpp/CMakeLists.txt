@@ -3,11 +3,16 @@ project(meta-search-app)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS 1)
 
-option(USE_LIBCXX "Use libc++ for the C++ standard library" OFF)
+option(USE_LIBCXX "Use libc++ for the C++ standard library" ON)
 
 include(CTest)
 include(CheckCXXCompilerFlag)
-include_directories(include meta/include)
+include_directories(include meta/include /usr/local/include)
+
+find_library(LIBJSONCPP_LIBRARY NAMES jsoncpp)
+find_library(LIBMICROHTTPD_LIBRARY NAMES microhttpd)
+find_library(LIBJSONRPCCPP_COMMON_LIBRARY NAMES jsonrpccpp-common)
+find_library(LIBJSONRPCCPP_SERVER_LIBRARY NAMES jsonrpccpp-server)
 
 if(UNIX)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -pedantic")
@@ -47,7 +52,7 @@ if(UNIX)
 
         if(NOT STDOPT)
             message(FATAL_ERROR
-                    "flow-api requires a compiler with at least C++0x support")
+                   "search-app requires a compiler with at least C++0x support")
         endif()
 
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${STDOPT}")
@@ -94,5 +99,6 @@ endif()
 add_subdirectory(meta meta-libs EXCLUDE_FROM_ALL)
 
 add_executable(api-server src/api-server.cpp src/my_stub_server.cpp)
-target_link_libraries(api-server cpptoml meta-index meta-ranker jsoncpp
-    microhttpd jsonrpccpp-common jsonrpccpp-server)
+target_link_libraries(api-server cpptoml meta-index meta-ranker
+  ${LIBJSONRPCCPP_COMMON_LIBRARY} ${LIBJSONRPCCPP_SERVER_LIBRARY}
+  ${LIBJSONCPP_LIBRARY} ${LIBMICROHTTPD_LIBRARY})
