@@ -1,7 +1,6 @@
 #include <jsonrpccpp/server/connectors/httpserver.h>
 #include "abstractstubserver.h"
 #include "index/inverted_index.h"
-#include "index/ranker/ranker.h"
 
 using namespace jsonrpc;
 
@@ -15,6 +14,4 @@ class MyStubServer : public AbstractStubServer
 
   private:
     std::shared_ptr<meta::index::inverted_index> idx_;
-    std::unique_ptr<meta::index::ranker> ranker_;
-    std::string last_ranker_method_;
 };

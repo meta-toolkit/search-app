@@ -1,11 +1,14 @@
 #include <algorithm>
+#include <random>
 #include <sstream>
 #include "my_stub_server.h"
 #include "corpus/document.h"
+#include "index/ranker/ranker.h"
 #include "index/ranker/ranker_factory.h"
 #include "index/ranker/okapi_bm25.h"
 #include "logging/logger.h"
 #include "util/time.h"
+#include "util/filesystem.h"
 
 MyStubServer::MyStubServer(AbstractServerConnector& connector,
                            std::shared_ptr<meta::index::inverted_index> idx)
@@ -17,6 +20,10 @@ Json::Value MyStubServer::search(const std::string& query_text,
                                  const std::string& ranker_method)
 {
     using namespace meta;
+
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> dis(1, 9999999);
 
     LOG(info) << "Running query using " << ranker_method << ": \""
               << query_text.substr(0, 40) << "...\"" << ENDLG;
@@ -30,26 +37,26 @@ Json::Value MyStubServer::search(const std::string& query_text,
     auto elapsed = meta::common::time(
         [&]()
         {
-            if (last_ranker_method_ != ranker_method)
+            auto rand = dis(gen);
+            std::string config_file = "ranker" + std::to_string(rand) + ".toml";
+            std::ofstream rconfig{config_file};
+            rconfig << "method = \"" << ranker_method << "\"\n";
+            rconfig.close();
+            std::unique_ptr<meta::index::ranker> ranker;
+            try
             {
-                std::ofstream rconfig{"ranker.toml"};
-                rconfig << "method = \"" << ranker_method << "\"\n";
-                rconfig.close();
-                last_ranker_method_ = ranker_method;
-                try
-                {
-                    ranker_ = meta::index::make_ranker(
-                        cpptoml::parse_file("ranker.toml"));
-                }
-                catch (meta::index::ranker_factory::exception& ex)
-                {
-                    LOG(error)
-                        << " -> couldn't create ranker, defaulting to bm25"
-                        << ENDLG;
-                    ranker_ = make_unique<meta::index::okapi_bm25>();
-                }
+                ranker = meta::index::make_ranker(
+                    cpptoml::parse_file(config_file));
             }
-            for (auto& result : ranker_->score(*idx_, query, 20))
+            catch (meta::index::ranker_factory::exception& ex)
+            {
+                LOG(error)
+                    << " -> couldn't create ranker, defaulting to bm25"
+                    << ENDLG;
+                ranker = make_unique<meta::index::okapi_bm25>();
+            }
+            filesystem::delete_file(config_file);
+            for (auto& result : ranker->score(*idx_, query, 50))
             {
                 Json::Value obj{Json::objectValue};
                 obj["score"] = result.score;
