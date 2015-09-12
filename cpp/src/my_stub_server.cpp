@@ -68,7 +68,7 @@ Json::Value MyStubServer::search(const std::string& query_text,
 
     json_ret["elapsed_time"] = static_cast<double>(elapsed.count());
 
-    LOG(info) << "Done running query. (" << elapsed.count() / 1000 << "ms)"
+    LOG(info) << "Done running query. (" << elapsed.count() << "ms)"
               << ENDLG;
     return json_ret;
 }
