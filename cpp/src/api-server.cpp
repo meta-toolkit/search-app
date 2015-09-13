@@ -19,7 +19,8 @@ int main(int argc, char* argv[])
               << ENDLG;
 
     auto start = std::chrono::high_resolution_clock::now();
-    auto idx = index::make_index<index::inverted_index>(argv[1]);
+    auto config = cpptoml::parse_file(argv[1]);
+    auto idx = index::make_index<index::inverted_index>(*config);
 
     LOG(info) << "Done loading index. ("
               << std::chrono::duration_cast<std::chrono::milliseconds>(

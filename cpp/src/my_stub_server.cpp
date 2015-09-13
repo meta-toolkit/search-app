@@ -1,6 +1,4 @@
 #include <algorithm>
-#include <random>
-#include <sstream>
 #include "my_stub_server.h"
 #include "corpus/document.h"
 #include "index/ranker/ranker.h"
@@ -21,10 +19,6 @@ Json::Value MyStubServer::search(const std::string& query_text,
 {
     using namespace meta;
 
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::uniform_int_distribution<> dis(1, 9999999);
-
     LOG(info) << "Running query using " << ranker_method << ": \""
               << query_text.substr(0, 40) << "...\"" << ENDLG;
 
@@ -34,28 +28,23 @@ Json::Value MyStubServer::search(const std::string& query_text,
 
     json_ret["results"] = Json::arrayValue;
 
+    auto config = cpptoml::make_table();
     auto elapsed = meta::common::time(
         [&]()
         {
-            auto rand = dis(gen);
-            std::string config_file = "ranker" + std::to_string(rand) + ".toml";
-            std::ofstream rconfig{config_file};
-            rconfig << "method = \"" << ranker_method << "\"\n";
-            rconfig.close();
             std::unique_ptr<meta::index::ranker> ranker;
             try
             {
-                ranker = meta::index::make_ranker(
-                    cpptoml::parse_file(config_file));
+                ranker = meta::index::ranker_factory::get().create(
+                    ranker_method, *config);
             }
             catch (meta::index::ranker_factory::exception& ex)
             {
-                LOG(error)
-                    << " -> couldn't create ranker, defaulting to bm25"
-                    << ENDLG;
+                LOG(error) << " -> couldn't create ranker, defaulting to bm25"
+                           << ENDLG;
                 ranker = make_unique<meta::index::okapi_bm25>();
             }
-            filesystem::delete_file(config_file);
+
             for (auto& result : ranker->score(*idx_, query, 50))
             {
                 Json::Value obj{Json::objectValue};
@@ -68,7 +57,6 @@ Json::Value MyStubServer::search(const std::string& query_text,
 
     json_ret["elapsed_time"] = static_cast<double>(elapsed.count());
 
-    LOG(info) << "Done running query. (" << elapsed.count() << "ms)"
-              << ENDLG;
+    LOG(info) << "Done running query. (" << elapsed.count() << "ms)" << ENDLG;
     return json_ret;
 }
