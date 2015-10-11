@@ -33,7 +33,7 @@ CXX=clang++ cmake ../ -DCMAKE_BUILD_TYPE=Release -DICU_ROOT=/usr/local/opt/icu4c
 make -j4
 ```
 
-#### Ubuntu
+#### Linux
 
 ```
 mkdir build/
