@@ -27,7 +27,7 @@ Next, we can compile the API server.
 cd cpp/
 mkdir build/
 cd build/
-CXX=clang++ cmake ../ -DCMAKE_BUILD_TYPE=Release
+CXX=clang++ cmake ../ -DCMAKE_BUILD_TYPE=Release -DICU_ROOT=/usr/local/opt/icu4c
 make -j4
 ```
 
