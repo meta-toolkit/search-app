@@ -23,13 +23,26 @@ git submodule update --init --recursive
 
 Next, we can compile the API server.
 
-```bash
-cd cpp/
+#### Mac OS X
+On Mac OS X, you will need to explicitly provide the ICU root directory:
+
+```
 mkdir build/
 cd build/
 CXX=clang++ cmake ../ -DCMAKE_BUILD_TYPE=Release -DICU_ROOT=/usr/local/opt/icu4c
 make -j4
 ```
+
+#### Ubuntu
+
+```
+mkdir build/
+cd build/
+CXX=clang++ cmake ../ -DCMAKE_BUILD_TYPE=Release
+make -j4
+```
+
+
 
 The API server should now be built. You can run it from inside the `build/`
 directory with the command
