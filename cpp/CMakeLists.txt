@@ -3,16 +3,12 @@ project(meta-search-app)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS 1)
 
-option(USE_LIBCXX "Use libc++ for the C++ standard library" ON)
+option(USE_LIBCXX "Use libc++ for the C++ standard library" OFF)
 
 include(CTest)
 include(CheckCXXCompilerFlag)
-include_directories(include meta/include /usr/local/include)
-
-find_library(LIBJSONCPP_LIBRARY NAMES jsoncpp)
-find_library(LIBMICROHTTPD_LIBRARY NAMES microhttpd)
-find_library(LIBJSONRPCCPP_COMMON_LIBRARY NAMES jsonrpccpp-common)
-find_library(LIBJSONRPCCPP_SERVER_LIBRARY NAMES jsonrpccpp-server)
+include_directories(include meta/include simple-http-server/include
+    /usr/local/include /usr/include)
 
 if(UNIX)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -pedantic")
@@ -43,19 +39,17 @@ if(UNIX)
         endif()
 
         if(NOT STDOPT)
-            check_cxx_compiler_flag(-std=c++0x HAS_CXX0X)
-            if(HAS_CXXOX)
-                message("-- Compiler supports C++0x (using it)")
-                set(STDOPT "-std=c++0x")
-            endif()
-        endif()
-
-        if(NOT STDOPT)
             message(FATAL_ERROR
-                   "search-app requires a compiler with at least C++0x support")
+                   "search-app requires a compiler with at least C++11 support")
         endif()
 
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${STDOPT}")
+    endif()
+
+    if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
+        if(CMAKE_GENERATOR STREQUAL "Ninja")
+          set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fdiagnostics-color")
+        endif()
     endif()
 
     if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
@@ -96,9 +90,22 @@ if(UNIX)
     set(CMAKE_REQUIRED_FLAGS "${CMAKE_REQUIRED_FLAGS} ${CXXABI_LIBRARY}")
 endif()
 
-add_subdirectory(meta meta-libs EXCLUDE_FROM_ALL)
+add_subdirectory(meta EXCLUDE_FROM_ALL)
 
-add_executable(api-server src/api-server.cpp src/my_stub_server.cpp)
-target_link_libraries(api-server cpptoml meta-index meta-ranker
-  ${LIBJSONRPCCPP_COMMON_LIBRARY} ${LIBJSONRPCCPP_SERVER_LIBRARY}
-  ${LIBJSONCPP_LIBRARY} ${LIBMICROHTTPD_LIBRARY})
+find_library(LIBEVENT NAMES event)
+message("-- Found LIBEVENT: ${LIBEVENT}")
+
+find_package(Threads REQUIRED)
+
+add_library(jsoncpp src/jsoncpp.cpp)
+
+add_library(searcher src/searcher.cpp)
+target_link_libraries(searcher cpptoml meta-util meta-analyzers meta-ranker
+    jsoncpp ${CMAKE_THREAD_LIBS_INIT})
+
+add_library(simple-http-server simple-http-server/src/simple_http_server.cpp)
+target_link_libraries(simple-http-server ${LIBEVENT} ${CMAKE_THREAD_LIBS_INIT})
+
+add_executable(api-server src/api_server.cpp)
+target_link_libraries(api-server simple-http-server searcher cpptoml ${LIBEVENT}
+    ${CMAKE_THREAD_LIBS_INIT})

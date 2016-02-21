@@ -5,8 +5,7 @@ $ ->
     if k.which == 13 # enter key pressed
       $("#search_button").click()
       return false;
-  $("#search_button").click ->
-    do_search()
+  $("#search_button").click -> do_search()
 
 do_search = () ->
   query = $("#query_text").val()
@@ -14,16 +13,11 @@ do_search = () ->
     $("#search_results_list").empty()
     $.ajax "/search-api",
       type: "POST"
-      dataType: "json"
+      dataType: "text"
       data: JSON.stringify
-        jsonrpc: "2.0"
-        method: "search"
-        params:
-          query_text: query
-          ranker_method: window.ranker
-        id: 1
-      success: (data, stat, xhr) ->
-        print_results(data.result)
+        query: query
+        ranker: window.ranker
+      success: (data, stat, xhr) -> print_results JSON.parse(data)
       failure: (axhr, stat, err) ->
         $("#search_results_list").append("<li>Something bad happened!</li>")
 

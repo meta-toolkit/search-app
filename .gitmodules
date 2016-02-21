@@ -1,3 +1,6 @@
 [submodule "cpp/meta"]
 	path = cpp/meta
 	url = git@github.com:meta-toolkit/meta.git
+[submodule "cpp/simple-http-server"]
+	path = cpp/simple-http-server
+	url = https://github.com/meta-toolkit/simple-http-server.git
