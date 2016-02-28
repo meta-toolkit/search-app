@@ -1,5 +1,5 @@
 stop-words = "../meta/data/lemur-stopwords.txt"
-prefix = "../meta/data/"
+prefix = "/srv/data/meta/"
 function-words = "../meta/data/function-words.txt"
 punctuation = "../meta/data/sentence-boundaries/sentence-punctuation.txt"
 start-exceptions = "../meta/data/sentence-boundaries/sentence-start-exceptions.txt"
@@ -7,16 +7,16 @@ end-exceptions = "../meta/data/sentence-boundaries/sentence-end-exceptions.txt"
 query-judgements = "../meta/data/ceeaus-qrels.txt"
 query-path = "../queries.txt" # create this file
 
-dataset = "ceeaus"
+dataset = "wikipedia"
 corpus = "line.toml" # located inside dataset folder
-forward-index = "ceeaus-fwd"
-inverted-index = "ceeaus-inv"
+forward-index = "wiki-fwd"
+inverted-index = "wiki-inv"
 indexer-ram-budget = 1024 # **estimated** RAM budget for indexing in MB
                           # always set this lower than your physical RAM!
 
 [server]
 address = "0.0.0.0"
-port = 8088
+port = 8089
 num-threads = 4
 
 [[analyzers]]
