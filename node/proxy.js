@@ -8,7 +8,7 @@ require('http').createServer(function(req, res) {
   var proto = 'http';
   if(re.test(req.url)) {
     var newUrl = req.url.replace("search-api", "")
-    target = 'http://0.0.0.0:8088' + newUrl;
+    target = 'http://0.0.0.0:8089' + newUrl;
     proto = 'json';
   }
   var options = {
